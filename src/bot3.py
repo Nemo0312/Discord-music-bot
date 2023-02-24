@@ -12,14 +12,14 @@ youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
     'format': 'bestaudio/best',
-    'outtmpl': '%(extractor)s-%(id)s-%(title)s.%(ext)s',
+    'outtmpl': '%(extractor)s-%(title)s.%(ext)s',
     'restrictfilenames': True,
     'noplaylist': True,
     'nocheckcertificate': True,
-    'ignoreerrors': False,
+    'ignoreerrors': True,
     'logtostderr': False,
     'quiet': False,
-    'no_warnings': True,
+    'no_warnings': False,
     'default_search': 'auto',
     'source_address': '0.0.0.0',  # bind to ipv4 since ipv6 addresses cause issues sometimes
 }
@@ -30,13 +30,14 @@ ffmpeg_options = {
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
-
+print('donzo')
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=0.5):
+        print('yt donzo')
         super().__init__(source, volume)
-
+        print('donzo')
         self.data = data
-
+        print('donzo')
         self.title = data.get('title')
         self.url = data.get('url')
 
@@ -95,10 +96,13 @@ class Music(commands.Cog):
     @commands.command()
     async def play(self, ctx, *, url):
         """Streams from a url (same as yt, but doesn't predownload)"""
-
+        print('play donzo')
         async with ctx.typing():
+            print('play donzo2')
             player = await YTDLSource.from_url(url, loop=self.bot.loop, stream=True)
+            print('play donzo3')
             ctx.voice_client.play(player, after=lambda e: print(f'Player error: {e}') if e else None)
+            print('play donzo4')
 
         await ctx.send(f'Now playing: {player.title}')
 
@@ -151,7 +155,7 @@ async def on_ready():
 async def main():
     async with bot:
         await bot.add_cog(Music(bot))
-        await bot.start('Token')
+        await bot.start('token')
 
 
 asyncio.run(main())
